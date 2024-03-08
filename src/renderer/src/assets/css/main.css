@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	#app {
+		@apply h-full;
+	}
+
+	html,
+	body {
+		@apply h-full;
+		@apply select-none;
+		@apply bg-transparent;
+		@apply antialiased text-zinc-900;
+		@apply overflow-hidden;
+	}
+
+	header {
+		-webkit-app-region: drag;
+	}
+
+	button {
+		-webkit-app-region: no-drag;
+		@apply outline-none;
+	}
+
+	* {
+		font-family: 'DM Sans Variable', sans-serif;
+	}
+}
