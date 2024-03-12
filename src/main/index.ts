@@ -1,9 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
 
-function createWindow(): void {
+import icon from '../../resources/icon.png?asset'
+import { getFolders, getFolderNotes, getRecentNotes, saveNote, renameNote } from '@/lib'
+import { Note } from '@shared/types'
+
+const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -57,6 +60,12 @@ function createWindow(): void {
   ipcMain.on('close-window', () => {
       mainWindow.close()
   })
+
+  ipcMain.handle('get-folders', (_, ...args: Parameters<() => Promise<string[]>>) => getFolders(...args))
+  ipcMain.handle('get-folder-notes', (_, ...args: Parameters<(folder: string) => Promise<Note[]>>) => getFolderNotes(...args))
+  ipcMain.handle('get-recent-notes', (_, ...args: Parameters<() => Promise<Note[]>>) => getRecentNotes(...args))
+  ipcMain.handle('save-note', (_, ...args: Parameters<(folder: string, title: string, content: string) => Promise<void>>) => saveNote(...args))
+  ipcMain.handle('rename-note', (_, ...args: Parameters<(folder: string, oldTitle: string, newTitle: string) => Promise<void>>) => renameNote(...args))
 }
 
 // This method will be called when Electron has finished

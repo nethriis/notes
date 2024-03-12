@@ -23,16 +23,16 @@ onMounted(() => {
 </script>
 
 <template>
-	<header class="absolute flex justify-end inset-0 h-8 bg-transparent">
+	<header class="absolute flex justify-end inset-0 h-8 bg-zinc-100 z-20">
 		<div class="grid grid-cols-3">
-			<button ref="minimizer" class="transition-all cursor-default px-4 h-8 hover:bg-zinc-100">
-				<Minimize />
+			<button ref="minimizer" class="transition-all cursor-default px-4 h-8 hover:bg-zinc-200">
+				<Minimize class="text-sm" />
 			</button>
-			<button ref="maximizer" class="transition-all cursor-default px-4 h-8 hover:bg-zinc-100">
-				<Maximize />
+			<button ref="maximizer" class="transition-all cursor-default px-4 h-8 hover:bg-zinc-200">
+				<Maximize class="text-sm" />
 			</button>
 			<button ref="closer" class="transition-all cursor-default px-4 h-8 hover:bg-red-500 hover:text-white">
-				<Close />
+				<Close class="text-sm" />
 			</button>
 		</div>
 	</header>
