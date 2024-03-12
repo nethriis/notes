@@ -61,7 +61,10 @@ watch(() => props.modelValue, (value: string) => {
 
 const saveNote = debounce(() => {
 	if (editor.value && store.selectedNote) {
-		window.context.saveNote(store.selectedNote?.folder, store.selectedNote?.title, editor.value?.getHTML())
+		window.context.saveNote(
+			store.selectedNote?.folder, store.selectedNote?.title, editor.value?.getHTML()
+		)
+		store.loadRecentNotes()
 		emit('save')
 	}
 }, 1000)

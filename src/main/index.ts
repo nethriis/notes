@@ -1,10 +1,20 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { watch } from 'chokidar'
 
 import icon from '../../resources/icon.png?asset'
-import { getFolders, getFolderNotes, getRecentNotes, saveNote, renameNote } from '@/lib'
-import { Note } from '@shared/types'
+import {
+  getFolders,
+  getFolderNotes,
+  getRecentNotes,
+  saveNote,
+  renameNote,
+  createFolder,
+  deleteFolder
+} from '@/lib'
+import { rootDir } from '@shared/constants'
+import type { Note } from '@shared/types'
 
 const createWindow = () => {
   // Create the browser window.
@@ -45,16 +55,28 @@ const createWindow = () => {
     mainWindow.loadFile(join(app.getAppPath(), '../renderer/index.html'))
   }
 
+  const watcher = watch(rootDir, {
+    ignored: /(^|[\/\\])\../,
+    persistent: true
+  })
+
+  watcher.on('addDir', (path) => {
+    mainWindow.webContents.send('folder-added', path)
+  })
+  watcher.on('unlinkDir', (path) => {
+    mainWindow.webContents.send('folder-removed', path)
+  })
+
   ipcMain.on('minimize-window', () => {
     mainWindow.minimize()
   })
 
   ipcMain.on('maximize-window', () => {
-      if (mainWindow.isMaximized()) {
-          mainWindow.unmaximize()
-      } else {
-          mainWindow.maximize()
-      }
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
   })
 
   ipcMain.on('close-window', () => {
@@ -66,6 +88,8 @@ const createWindow = () => {
   ipcMain.handle('get-recent-notes', (_, ...args: Parameters<() => Promise<Note[]>>) => getRecentNotes(...args))
   ipcMain.handle('save-note', (_, ...args: Parameters<(folder: string, title: string, content: string) => Promise<void>>) => saveNote(...args))
   ipcMain.handle('rename-note', (_, ...args: Parameters<(folder: string, oldTitle: string, newTitle: string) => Promise<void>>) => renameNote(...args))
+  ipcMain.handle('create-folder', (_, ...args: Parameters<(folder: string) => Promise<void>>) => createFolder(...args))
+  ipcMain.handle('delete-folder', (_, ...args: Parameters<(folder: string) => Promise<void>>) => deleteFolder(...args))
 }
 
 // This method will be called when Electron has finished

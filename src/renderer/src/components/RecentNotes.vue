@@ -26,7 +26,7 @@ const selectRecentNote = async (folder: string, title: string) => {
 				}"
 				>
 				<File class="w-4 h-4 mr-3" />
-				<span class="whitespace-nowrap text-ellipsis overflow-hidden">{{ note.title }}</span>
+				<span class="whitespace-nowrap text-ellipsis overflow-hidden flex-1">{{ note.title }}</span>
 			</li>
 		</ul>
 	</nav>

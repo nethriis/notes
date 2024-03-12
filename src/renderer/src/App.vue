@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
+import { useNotesStore } from '@/store/notes'
 import Layout from '@/components/Layout.vue'
 import Titlebar from '@/components/Titlebar.vue'
 import Sidebar from '@/components/Sidebar.vue'
@@ -11,9 +14,10 @@ import FolderPlus from '@/components/Icon/FolderPlus.vue'
 import Star from '@/components/Icon/Star.vue'
 import Trash from '@/components/Icon/Trash.vue'
 import Archive from '@/components/Icon/Archive.vue'
-import { useNotesStore } from '@/store/notes'
 
 const store = useNotesStore()
+
+const newFolder = ref(false)
 </script>
 
 <template>
@@ -41,13 +45,17 @@ const store = useNotesStore()
       <div>
         <div class="flex items-center justify-between">
           <p class="px-4 font-semibold text-xs text-zinc-500">Folders</p>
-          <button type="button" class="px-4">
-            <FolderPlus class="w-4 h-4 text-zinc-500" />
+          <button
+            type="button"
+            @click="() => newFolder = true"
+            class="px-4 text-zinc-500 hover:text-zinc-900"
+          >
+            <FolderPlus class="w-4 h-4" />
           </button>
         </div>
         <Suspense>
           <template #default>
-            <FolderList />
+            <FolderList :newFolder="newFolder" @folderCreated="() => newFolder = false" />
           </template>
           <template #fallback>
             <div class="px-4 py-2 text-sm text-zinc-500">Loading...</div>

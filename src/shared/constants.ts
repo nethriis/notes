@@ -1,3 +1,5 @@
-export const appDirName: 'notes' = 'notes'
-export const rootDir = 'c:/Users/david/Documents/NoteR'
+import { app } from 'electron'
+
+export const appDirName: 'Notes' = 'Notes'
+export const rootDir = `${app.getPath('documents')}/Notes`
 export const fileEncoding: BufferEncoding = 'utf-8'

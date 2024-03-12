@@ -1,4 +1,5 @@
-import { readdir, readFile, writeFile, rename, stat } from 'node:fs/promises'
+import { readdir, readFile, writeFile, rename, mkdir, rm, stat } from 'node:fs/promises'
+import { type WatchEventType, watch } from 'node:fs'
 
 import { rootDir, fileEncoding } from '@shared/constants'
 
@@ -71,4 +72,12 @@ export const saveNote = async (folder: string, title: string, content: string) =
 
 export const renameNote = async (folder: string, oldTitle: string, newTitle: string) => {
 	await rename(`${rootDir}/${folder}/${oldTitle}.html`, `${rootDir}/${folder}/${newTitle}.html`)
+}
+
+export const createFolder = async (folder: string) => {
+	await mkdir(`${rootDir}/${folder}`)
+}
+
+export const deleteFolder = async (folder: string) => {
+	await rm(`${rootDir}/${folder}`, { recursive: true })
 }
