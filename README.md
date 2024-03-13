@@ -23,4 +23,4 @@ This project is licensed under the Apache-2.0 license - see the [LICENSE](/LICEN
 
 Thank you for choosing **Notes** for your note-taking needs. We're excited to be a part of your productivity journey!
 
-Generated with [MarkdownView](https://www.markdownview.com) ✨
+_Generated with [MarkdownView](https://www.markdownview.com) ✨_
