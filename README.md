@@ -19,7 +19,7 @@ We welcome contributions to **Notes**! If you'd like to contribute, please fork 
 
 ## License
 
-This project is licensed under the Apache-2.0 license - see the [LICENSE](/LICENSE.md) file for details.
+This project is licensed under the Apache-2.0 license - see the [LICENSE](/LICENSE) file for details.
 
 Thank you for choosing **Notes** for your note-taking needs. We're excited to be a part of your productivity journey!
 
