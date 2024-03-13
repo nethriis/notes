@@ -20,7 +20,9 @@ try {
     saveNote: (...args: Parameters<(folder: string, title: string, content: string) => Promise<void>>) => ipcRenderer.invoke('save-note', ...args),
     renameNote: (...args: Parameters<(folder: string, oldTitle: string, newTitle: string) => Promise<void>>) => ipcRenderer.invoke('rename-note', ...args),
     createFolder: (...args: Parameters<(folder: string) => Promise<void>>) => ipcRenderer.invoke('create-folder', ...args),
-    deleteFolder: (...args: Parameters<(folder: string) => Promise<void>>) => ipcRenderer.invoke('delete-folder', ...args)
+    deleteFolder: (...args: Parameters<(folder: string) => Promise<void>>) => ipcRenderer.invoke('delete-folder', ...args),
+    createNote: (...args: Parameters<(folder: string, title: string) => Promise<void>>) => ipcRenderer.invoke('create-note', ...args),
+    deleteNote: (...args: Parameters<(folder: string, title: string) => Promise<void>>) => ipcRenderer.invoke('delete-note', ...args)
   })
 } catch (error) {
   console.error(error)

@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
 import Editor from '@/components/Editor.vue'
 import More from '@/components/Icon/More.vue'
 import Calendar from '@/components/Icon/Calendar.vue'
 import Folder from '@/components/Icon/Folder.vue'
 import File from '@/components/Icon/File.vue'
+import Star from '@/components/Icon/Star.vue'
+import Archive from '@/components/Icon/Archive.vue'
+import Trash from '@/components/Icon/Trash.vue'
 import { useNotesStore } from '@/store/notes'
 import { useDateFns } from '@/hooks/useDateFns'
 
@@ -41,15 +45,70 @@ const changeTitle = async (event: KeyboardEvent | FocusEvent) => {
 		await store.renameNote(store.selectedNote.folder, store.selectedNote?.title, noteTitle.value)
 	}
 }
+
+const deleteNote = async (folder?: string, title?: string) => {
+	if (folder && title && store.currentFolder) {
+		await window.context.deleteNote(folder, title)
+		await store.loadRecentNotes()
+		await store.selectFolder(store.currentFolder)
+		store.selectNote(null)
+	}
+}
 </script>
 
 <template>
 	<div v-if="note" class="content mt-8 p-12 flex-1 overflow-auto relative">
 		<div class="flex items-center justify-between space-x-4">
 			<input type="text" v-model="noteTitle" @blur="changeTitle" @keyup.enter="changeTitle" class="w-full font-bold text-3xl leading-none outline-none" />
-			<button type="button" class="flex items-center p-1 border border-zinc-500 rounded-full">
-				<More class="w-5 h-5 text-zinc-500" />
-			</button>
+			<Popover v-slot="{ open }" class="relative">
+				<PopoverButton
+					as="button"
+					class="flex items-center p-1 border border-zinc-500 rounded-full"
+				>
+					<More class="w-5 h-5 text-zinc-500" />
+				</PopoverButton>
+				<Transition
+					enterActiveClass="transition duration-200 ease-out"
+					enterFromClass="translate-y-1 opacity-0"
+					enterToClass="translate-y-0 opacity-100"
+					leaveActiveClass="transition duration-150 ease-in"
+					leaveFromClass="translate-y-0 opacity-100"
+					leaveToClass="translate-y-1 opacity-0"
+				>
+					<PopoverPanel
+						class="absolute right-0 z-20 mt-3 p-2 rounded-lg min-w-44 bg-zinc-100 shadow-md"
+					>
+						<ul>
+							<li>
+								<button
+									class="px-2 py-1.5 space-x-2 rounded-md flex items-center w-full hover:bg-zinc-200 text-sm transition-colors"
+								>
+									<Star	class="w-4 h-4" />
+									<p class="whitespace-nowrap">Add to favorites</p>
+								</button>
+							</li>
+							<li>
+								<button
+									class="px-2 py-1.5 space-x-2 rounded-md flex items-center w-full hover:bg-zinc-200 text-sm transition-colors"
+								>
+									<Archive class="w-4 h-4" />
+									<p class="whitespace-nowrap">Archive</p>
+								</button>
+							</li>
+							<div class="h-[1px] bg-zinc-200 my-2" />
+							<li>
+								<button
+									@click="() => deleteNote(note?.folder, note?.title)"
+									class="px-2 py-1.5 space-x-2 rounded-md flex items-center w-full hover:bg-zinc-200 text-sm transition-colors"
+								>
+									<Trash class="w-4 h-4" />
+									<p class="whitespace-nowrap">Delete</p>
+								</button>
+							</li>
+						</ul>
+					</PopoverPanel>
+				</Transition>
+			</Popover>
 		</div>
 		<table class="w-full mb-4">
 			<thead class="h-0">

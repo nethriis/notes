@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { useEditor, EditorContent  } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Highlight from '@tiptap/extension-highlight'
@@ -38,10 +38,10 @@ const editor = useEditor({
 		Highlight,
 		Typography,
 		TaskList,
+		Link,
 		TaskItem.configure({
 			nested: false
 		}),
-		Link
   ],
 	onUpdate: () => {
 		emit('update:modelValue', editor.value?.getHTML() || '')
@@ -227,6 +227,18 @@ const linkInput = ref('')
 
 .tiptap.ProseMirror p {
 	@apply text-sm;
+}
+
+.tiptap.ProseMirror p > code {
+	@apply px-1 py-0.5 rounded-sm bg-zinc-100 font-['DM_Mono',monospace] text-xs text-zinc-700;
+}
+
+.tiptap.ProseMirror pre > * {
+	@apply font-['DM_Mono',monospace];
+}
+
+.tiptap.ProseMirror pre {
+	@apply p-4 rounded-md bg-zinc-100 text-xs text-zinc-700;
 }
 
 .tiptap.ProseMirror h1 {

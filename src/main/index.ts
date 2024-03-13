@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { watch } from 'chokidar'
+import { access, mkdir } from 'node:fs/promises'
 
 import icon from '../../resources/icon.png?asset'
 import {
@@ -11,12 +12,24 @@ import {
   saveNote,
   renameNote,
   createFolder,
-  deleteFolder
+  deleteFolder,
+  createNote,
+  deleteNote
 } from '@/lib'
 import { rootDir } from '@shared/constants'
 import type { Note } from '@shared/types'
 
-const createWindow = () => {
+const getRootDir = async () => {
+  try {
+    await access(rootDir)
+  } catch {
+    console.log('Creating root directory')
+    await mkdir(rootDir, { recursive: true })
+  }
+}
+
+const createWindow = async () => {
+  await getRootDir()
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -90,6 +103,8 @@ const createWindow = () => {
   ipcMain.handle('rename-note', (_, ...args: Parameters<(folder: string, oldTitle: string, newTitle: string) => Promise<void>>) => renameNote(...args))
   ipcMain.handle('create-folder', (_, ...args: Parameters<(folder: string) => Promise<void>>) => createFolder(...args))
   ipcMain.handle('delete-folder', (_, ...args: Parameters<(folder: string) => Promise<void>>) => deleteFolder(...args))
+  ipcMain.handle('create-note', (_, ...args: Parameters<(folder: string, title: string) => Promise<void>>) => createNote(...args))
+  ipcMain.handle('delete-note', (_, ...args: Parameters<(folder: string, title: string) => Promise<void>>) => deleteNote(...args))
 }
 
 // This method will be called when Electron has finished

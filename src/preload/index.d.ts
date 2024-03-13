@@ -18,7 +18,9 @@ declare global {
       saveNote: (folder: string, title: string, content: string) => Promise<void>,
       renameNote: (folder: string, oldTitle: string, newTitle: string) => Promise<void>,
       createFolder: (folder: string) => Promise<void>,
-      deleteFolder: (folder: string) => Promise<void>
+      deleteFolder: (folder: string) => Promise<void>,
+      createNote: (folder: string, title: string) => Promise<void>
+      deleteNote: (folder: string, title: string) => Promise<void>
     }
   }
 }

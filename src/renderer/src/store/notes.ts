@@ -31,7 +31,12 @@ export const useNotesStore = defineStore('notes', () => {
 
 		recentNotes.value = _notes.flat()
 	}
-	const selectNote = (noteName: string) => {
+	const selectNote = (noteName: string | null) => {
+		if (!noteName) {
+			selectedNote.value = null
+			return
+		}
+
 		const note = notes.value.find((note) => note.title === noteName)
 
 		if (note) {

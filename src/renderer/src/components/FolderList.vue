@@ -22,13 +22,6 @@ const isEnterPressed = ref(false)
 
 await store.loadFolders()
 
-watch(() => props.newFolder, async (value) => {
-	if (value) {
-		await nextTick()
-		newFolderInput.value?.focus()
-	}
-})
-
 const createFolder = async (event: KeyboardEvent | FocusEvent) => {
 	if (isEnterPressed.value) {
 		isEnterPressed.value = false
@@ -43,7 +36,6 @@ const createFolder = async (event: KeyboardEvent | FocusEvent) => {
 	if (newFolderName.value !== '') {
 		await window.context.createFolder(newFolderName.value)
 	}
-
 	emit('folderCreated')
 	newFolderName.value = 'New Folder'
 }
@@ -51,6 +43,13 @@ const createFolder = async (event: KeyboardEvent | FocusEvent) => {
 const deleteFolder = async (folder: string) => {
 	await window.context.deleteFolder(folder)
 }
+
+watch(() => props.newFolder, async (value) => {
+	if (value) {
+		await nextTick()
+		newFolderInput.value?.focus()
+	}
+})
 
 onMounted(() => {
 	window.context.onFolderCreate(async () => {
